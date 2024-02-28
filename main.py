@@ -1,6 +1,7 @@
 from simpy import *
 from random import *
 import copy
+import graphics
 #Group 1 CS 630
 #Changes and participation can be seen in github
 #If creating new function, create in a new file or a file only edited by you
@@ -36,16 +37,18 @@ results = []
 
 class job:
     def __init__(self,time):
-        self.timeRemaing = time()
+        self.timeRemaining = time()
+        self.burstTime = self.timeRemaining
         self.requestTime = 0
         self.jid = 0
         self.done = False
         self.timeGraph = []
+        self.waitingTime = 0
 
     def step(self,env,timeGraph):
-        self.timeRemaing -= 1
+        self.timeRemaining -= 1
         timeGraph.append(self.jid)
-        if self.timeRemaing <= 0:
+        if self.timeRemaining <= 0:
             self.done = True
         else:
             self.done = False
@@ -71,25 +74,104 @@ def FCFS(env,jobs,timeGraph):
     print(len(jobs))
     for j in jobs:
         while not j.done:
-            yield env.process(j.step(env,timeGraph))
+            yield env.process(j.step(env,timeGraph))     
+
+
+def SRT(env,jobs,timeGraph):
+    startTime = env.now
+    while not all(j.done for j in jobs):
+        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        if(len(availableJobs) == 0):
+            yield env.timeout(1)
+            continue
+        currentJob = min(availableJobs, key = lambda x: x.timeRemaining)
+        for j in jobs:
+            if j.done:
+                jobs.remove(j)
+        yield env.process(currentJob.step(env,timeGraph))
         
-    results.append(jobs)
+def RR(env,jobs,timeGraph):
+    startTime = env.now
+    timerStart = env.now
+    jindex = 0
+    while not all(j.done for j in jobs):
+        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        if len(availableJobs) == 0:
+            yield env.timeout(1)
+            continue
+        if env.now - timerStart >= 50:
+            if len(availableJobs) > 0:
+                timerStart = env.now
+                jindex = (jindex + 1) % len(availableJobs)
+        else:
+            jindex = jindex % len(availableJobs)
+        currentJob = availableJobs[jindex]
+        for j in jobs:
+            if j.done:
+                jobs.remove(j)
+        yield env.process(currentJob.step(env,timeGraph))
+        
+def SPN(env,jobs,timeGraph):
+    startTime = env.now
+    while not all(j.done for j in jobs):
+        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        if len(availableJobs) == 0:
+            yield env.timeout(1)
+            continue
+        currentJob = min(availableJobs, key = lambda x: x.burstTime)
+        for j in jobs:
+            if j.done:
+                jobs.remove(j)
+        yield env.process(currentJob.step(env,timeGraph))
+        
+def HRRN(env,jobs,timeGraph):
+    startTime = env.now
+    while not all(j.done for j in jobs):
+        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        if len(availableJobs) == 0:
+            yield env.timeout(1)
+            continue
+        currentJob = min(availableJobs, key = lambda x: (x.burstTime+x.waitingTime)/x.burstTime)
+        for wj in availableJobs :
+            if wj != currentJob:    
+                wj.waitingTime += 1
+        for j in jobs:
+            if j.done:
+                jobs.remove(j)
+        yield env.process(currentJob.step(env,timeGraph))
+
+class metaAlg:
+    def __init__(self,alg,name):
+        self.alg = alg
+        self.name = name
+        self.timeGraph = []
+        
 
 
 
-
-functs = [FCFS]
 def JobDispatcher(env):
     jobs = [job(TimeDist) for i in range(numJobs)]
+    top = ''
     for j in jobs:
-        j.requestTime = randomRequestTime()   
+        j.requestTime = randomRequestTime()     
         j.jid = jobs.index(j);
+        top += str(j.jid)+ ":" + str(j.requestTime) + ':' + str(j.timeRemaining) + ','
         j.done = False  
+    print(top)
 
-    for algo in functs:
-        timeGraph = []
-        yield env.process(algo(env,copy.deepcopy(jobs),timeGraph))
-        timeGraphToString(timeGraph)
+
+    fcfs = metaAlg(FCFS,"First Come First Serve")
+    srt = metaAlg(SRT,"Shortest Remaining Time")
+    rr = metaAlg(RR,"Round Robin")
+    spn = metaAlg(SPN,"Shortest Process Next")
+    hrrn = metaAlg(HRRN,"Highest Response Ratio Next")
+
+    algos = [fcfs,srt,rr,spn,hrrn]
+    for algo in algos:
+        yield env.process(algo.alg(env,copy.deepcopy(jobs),algo.timeGraph))
+        timeGraphToString(algo.timeGraph)
+        graphics.displayGnattChart(algo.timeGraph,numJobs,algo.name)
+    graphics.initGraph()
     pass
 
 def test(env):
