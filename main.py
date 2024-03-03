@@ -1,7 +1,9 @@
+from urllib import request
 from simpy import *
 from random import *
 import copy
 import graphics
+import math
 #Group 1 CS 630
 #Changes and participation can be seen in github
 #If creating new function, create in a new file or a file only edited by you
@@ -15,11 +17,11 @@ def randomIO():
 
 #Time Distributions
 def randomTime():
-    return randint(1,100)+100
+    return randint(200,500)+100
 
 #Job Request Time Distributions
 def randomRequestTime():
-    return randint(1,1000)
+    return randint(1,2000)
 
 #Magic Numbers
 numJobs = 10
@@ -44,6 +46,7 @@ class job:
         self.done = False
         self.timeGraph = []
         self.waitingTime = 0
+        self.queueLevel = 0
 
     def step(self,env,timeGraph):
         self.timeRemaining -= 1
@@ -58,23 +61,33 @@ def timeGraphToString(timeGraph):
     cj = timeGraph[0];
     total = 0
     strtoprnt = ""
+    index = 0
     for i in timeGraph:
         if i == cj:
             total += 1
         else:
-            strtoprnt += str(cj) + ":" + str(total) + ","
+            strtoprnt += str(cj) + ":" + str(total) + ": index " + str(index)+ ","
             total = 0
             cj = i
-    print(strtoprnt)
-
-
+        index += 1
+    #print(strtoprnt)
+    #print("----------------------------------------------------------------------------------")
 
 def FCFS(env,jobs,timeGraph):
-    jobs = sorted(jobs,key=lambda x: x.requestTime)
-    print(len(jobs))
-    for j in jobs:
-        while not j.done:
-            yield env.process(j.step(env,timeGraph))     
+    startTime = env.now
+    while not all(j.done for j in jobs):
+        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        if(len(availableJobs) == 0):
+            yield env.timeout(1)
+            timeGraph.append(-1)
+            continue
+        availableJobs = sorted(availableJobs,key=lambda x: x.requestTime)
+        
+        for j in availableJobs:
+            #print
+            while not j.done:
+                yield env.process(j.step(env,timeGraph))     
+
 
 
 def SRT(env,jobs,timeGraph):
@@ -83,6 +96,7 @@ def SRT(env,jobs,timeGraph):
         availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
         if(len(availableJobs) == 0):
             yield env.timeout(1)
+            timeGraph.append(-1)
             continue
         currentJob = min(availableJobs, key = lambda x: x.timeRemaining)
         for j in jobs:
@@ -98,8 +112,9 @@ def RR(env,jobs,timeGraph):
         availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
         if len(availableJobs) == 0:
             yield env.timeout(1)
+            timeGraph.append(-1)
             continue
-        if env.now - timerStart >= 50:
+        if env.now - timerStart >= 25:
             if len(availableJobs) > 0:
                 timerStart = env.now
                 jindex = (jindex + 1) % len(availableJobs)
@@ -117,6 +132,7 @@ def SPN(env,jobs,timeGraph):
         availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
         if len(availableJobs) == 0:
             yield env.timeout(1)
+            timeGraph.append(-1)
             continue
         currentJob = min(availableJobs, key = lambda x: x.burstTime)
         for j in jobs:
@@ -130,6 +146,7 @@ def HRRN(env,jobs,timeGraph):
         availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
         if len(availableJobs) == 0:
             yield env.timeout(1)
+            timeGraph.append(-1)
             continue
         currentJob = min(availableJobs, key = lambda x: (x.burstTime+x.waitingTime)/x.burstTime)
         for wj in availableJobs :
@@ -139,6 +156,23 @@ def HRRN(env,jobs,timeGraph):
             if j.done:
                 jobs.remove(j)
         yield env.process(currentJob.step(env,timeGraph))
+
+def FB(env,jobs,timeGraph):
+    startTime = env.now
+    while not all(j.done for j in jobs):
+        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        if len(availableJobs) == 0:
+            yield env.timeout(1)
+            timeGraph.append(-1)
+            continue
+        currentJob = min(availableJobs, key = lambda x: x.queueLevel)
+        factor = (currentJob.burstTime - currentJob.timeRemaining)/10+.0001
+        currentJob.queueLevel = min(int(math.log2(factor)),6)
+        for j in jobs:
+            if j.done:
+                jobs.remove(j)
+        yield env.process(currentJob.step(env,timeGraph))
+        
 
 class metaAlg:
     def __init__(self,alg,name):
@@ -157,20 +191,22 @@ def JobDispatcher(env):
         j.jid = jobs.index(j);
         top += str(j.jid)+ ":" + str(j.requestTime) + ':' + str(j.timeRemaining) + ','
         j.done = False  
-    print(top)
 
+
+    jobs.sort(key=lambda x: x.jid)
+    requestGraph = [j.requestTime for j in jobs]
 
     fcfs = metaAlg(FCFS,"First Come First Serve")
     srt = metaAlg(SRT,"Shortest Remaining Time")
     rr = metaAlg(RR,"Round Robin")
     spn = metaAlg(SPN,"Shortest Process Next")
     hrrn = metaAlg(HRRN,"Highest Response Ratio Next")
-
-    algos = [fcfs,srt,rr,spn,hrrn]
+    fb = metaAlg(FB,"Feedback")
+    algos = [fcfs]#,srt,rr,spn,hrrn,fb]
     for algo in algos:
         yield env.process(algo.alg(env,copy.deepcopy(jobs),algo.timeGraph))
         timeGraphToString(algo.timeGraph)
-        graphics.displayGnattChart(algo.timeGraph,numJobs,algo.name)
+        graphics.displayGnattChart(algo.timeGraph,numJobs,algo.name,requestGraph)
     graphics.initGraph()
     pass
 
