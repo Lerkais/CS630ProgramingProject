@@ -204,8 +204,14 @@ def JobDispatcher(env):
     jobs[0].burstTime = 1000
     jobs[0].timeRemaining = 1000
 
+    
+
     jobs.sort(key=lambda x: x.jid)
     requestGraph = [j.requestTime for j in jobs]
+    
+    #print all jobs informations 
+    for j in jobs:
+        printJob(j)
 
     fcfs = metaAlg(FCFS,"First Come First Serve")
     srt = metaAlg(SRT,"Shortest Remaining Time")
@@ -220,6 +226,10 @@ def JobDispatcher(env):
         graphics.displayGnattChart(algo.timeGraph,numJobs,algo.name,requestGraph)
     graphics.initGraph()
     pass
+
+#function to print a job's information
+def printJob(j):
+    print("Job ID: " + str(j.jid) + " Request Time: " + str(j.requestTime) + " Burst Time: " + str(j.burstTime) + " Time Remaining: " + str(j.timeRemaining) + " Done: " + str(j.done))
 
 def test(env):
     yield env.timeout(1);
