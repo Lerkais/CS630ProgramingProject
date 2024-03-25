@@ -6,7 +6,7 @@ def initGraph():
     plt.show()
 
 def displayGnattChart(timeGraph,numJobs,title,requestGraph):
-    #Format will be jobID:cyclesActive,repeat etc
+    #Format will be an arra of what job is active at each time step
     fig, gnt = plt.subplots()
     gnt.set_ylim(0, numJobs)
     gnt.set_xlim(0, len(timeGraph))
@@ -18,6 +18,7 @@ def displayGnattChart(timeGraph,numJobs,title,requestGraph):
     index = 0
     prevIndex = 0
     jid = -1
+    totalTimePerJob = [0]*numJobs
     for i in timeGraph:
         if i != -1:
             jid = i
@@ -33,15 +34,20 @@ def displayGnattChart(timeGraph,numJobs,title,requestGraph):
             barLen += 1
         else:
             #print(jid,barLen)
-            gnt.broken_barh([(prevIndex,barLen)],(jid,1),facecolors=('blue'))
-            print("Job " + str(jid) + " has been active at " +str(prevIndex) + " cycles")
+            gnt.broken_barh([(prevIndex,barLen)],(jid,1),facecolors=('teal'))
+            totalTimePerJob[jid] += barLen
+            #print("Job " + str(jid) + " has been active at " +str(prevIndex) + " cycles")
             prevIndex = index
             jid = i
             barLen = 0
-            
+    gnt.broken_barh([(prevIndex,barLen)],(jid,1),facecolors=('teal'))
+    totalTimePerJob[jid] += barLen
+    print("Total Time per Job",totalTimePerJob)
+    #print("Job " + str(jid) + " has been active at " +str(prevIndex) + " cycles")
+    
     index = 0
     for i in requestGraph:
-        gnt.broken_barh([(i,20)],(index,1),facecolors=('red'))
+        gnt.broken_barh([(i,20)],(index,1),facecolors=('blue'))
         index += 1
 
     plt.draw()

@@ -10,18 +10,23 @@ import math
 #This helps prevent merge conflicts
 #James will edit your function into this main file as needed
 
-seed(103)
+seed(99)
 #IO Distributions
 def randomIO():
     return randint(1,500)+100
 
 #Time Distributions
 def randomTime():
-    return randint(200,500)+100
+    return randint(200,500)
 
 #Job Request Time Distributions
+rrt = 0
 def randomRequestTime():
     return randint(1,2000)
+def compoundingRequestTime():
+    global rrt
+    rrt += 100
+    return rrt
 
 #Magic Numbers
 numJobs = 10
@@ -81,12 +86,17 @@ def FCFS(env,jobs,timeGraph):
             yield env.timeout(1)
             timeGraph.append(-1)
             continue
-        availableJobs = sorted(availableJobs,key=lambda x: x.requestTime)
+        else:
+            availableJobs = sorted(availableJobs,key=lambda x: x.requestTime)
+            for j in availableJobs:
+                if j.done:
+                    jobs.remove(j)
+            currentJob = availableJobs[0]
+            yield env.process(currentJob.step(env,timeGraph))
         
-        for j in availableJobs:
-            #print
-            while not j.done:
-                yield env.process(j.step(env,timeGraph))     
+            
+                
+
 
 
 
@@ -187,11 +197,12 @@ def JobDispatcher(env):
     jobs = [job(TimeDist) for i in range(numJobs)]
     top = ''
     for j in jobs:
-        j.requestTime = randomRequestTime()     
+        j.requestTime = randomRequestTime()   
         j.jid = jobs.index(j);
         top += str(j.jid)+ ":" + str(j.requestTime) + ':' + str(j.timeRemaining) + ','
         j.done = False  
-
+    jobs[0].burstTime = 1000
+    jobs[0].timeRemaining = 1000
 
     jobs.sort(key=lambda x: x.jid)
     requestGraph = [j.requestTime for j in jobs]
@@ -202,7 +213,7 @@ def JobDispatcher(env):
     spn = metaAlg(SPN,"Shortest Process Next")
     hrrn = metaAlg(HRRN,"Highest Response Ratio Next")
     fb = metaAlg(FB,"Feedback")
-    algos = [fcfs]#,srt,rr,spn,hrrn,fb]
+    algos = [fcfs,srt,rr,spn,hrrn,fb]
     for algo in algos:
         yield env.process(algo.alg(env,copy.deepcopy(jobs),algo.timeGraph))
         timeGraphToString(algo.timeGraph)
