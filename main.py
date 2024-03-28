@@ -13,19 +13,19 @@ import math
 seed(99)
 #IO Distributions
 def randomIO():
-    return randint(1,500)+100
+    return randint(1,50)+10
 
 #Time Distributions
 def randomTime():
-    return randint(200,500)
+    return randint(20,50)
 
 #Job Request Time Distributions
 rrt = 0
 def randomRequestTime():
-    return randint(1,2000)
+    return randint(1,20)
 def compoundingRequestTime():
     global rrt
-    rrt += 100
+    rrt += 10
     return rrt
 
 #Magic Numbers
@@ -52,6 +52,7 @@ class job:
         self.timeGraph = []
         self.waitingTime = 0
         self.queueLevel = 0
+        self.completionTime = 0
 
     def step(self,env,timeGraph):
         self.timeRemaining -= 1
@@ -91,6 +92,7 @@ def FCFS(env,jobs,timeGraph):
             for j in availableJobs:
                 if j.done:
                     jobs.remove(j)
+                    j.completionTime = env.now
             currentJob = availableJobs[0]
             yield env.process(currentJob.step(env,timeGraph))
         
@@ -112,6 +114,7 @@ def SRT(env,jobs,timeGraph):
         for j in jobs:
             if j.done:
                 jobs.remove(j)
+                j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
         
 def RR(env,jobs,timeGraph):
@@ -128,12 +131,14 @@ def RR(env,jobs,timeGraph):
             if len(availableJobs) > 0:
                 timerStart = env.now
                 jindex = (jindex + 1) % len(availableJobs)
-        else:
+        elif jindex >= len(availableJobs):
             jindex = jindex % len(availableJobs)
+            timerStart = env.now
         currentJob = availableJobs[jindex]
         for j in jobs:
             if j.done:
                 jobs.remove(j)
+                j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
         
 def SPN(env,jobs,timeGraph):
@@ -148,6 +153,7 @@ def SPN(env,jobs,timeGraph):
         for j in jobs:
             if j.done:
                 jobs.remove(j)
+                j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
         
 def HRRN(env,jobs,timeGraph):
@@ -165,6 +171,7 @@ def HRRN(env,jobs,timeGraph):
         for j in jobs:
             if j.done:
                 jobs.remove(j)
+                j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
 
 def FB(env,jobs,timeGraph):
@@ -181,6 +188,7 @@ def FB(env,jobs,timeGraph):
         for j in jobs:
             if j.done:
                 jobs.remove(j)
+                j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
         
 
@@ -201,8 +209,8 @@ def JobDispatcher(env):
         j.jid = jobs.index(j);
         top += str(j.jid)+ ":" + str(j.requestTime) + ':' + str(j.timeRemaining) + ','
         j.done = False  
-    jobs[0].burstTime = 1000
-    jobs[0].timeRemaining = 1000
+    jobs[0].burstTime = 100
+    jobs[0].timeRemaining = 100
 
     
 
@@ -223,7 +231,14 @@ def JobDispatcher(env):
     for algo in algos:
         yield env.process(algo.alg(env,copy.deepcopy(jobs),algo.timeGraph))
         timeGraphToString(algo.timeGraph)
-        graphics.displayGnattChart(algo.timeGraph,numJobs,algo.name,requestGraph)
+        for i in algo.timeGraph:
+            if i == -1:
+                pass
+            else:
+                for j in jobs:
+                    if j.jid == i:
+                        j.completionTime = env.now
+        graphics.displayGnattChart(algo.timeGraph,numJobs,algo.name,requestGraph,completionGraph=[j.completionTime for j in jobs])
     graphics.initGraph()
     pass
 

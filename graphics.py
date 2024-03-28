@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 def initGraph():
     plt.show()
 
-def displayGnattChart(timeGraph,numJobs,title,requestGraph):
+def displayGnattChart(timeGraph,numJobs,title,requestGraph,completionGraph):
     #Format will be an arra of what job is active at each time step
     fig, gnt = plt.subplots()
     gnt.set_ylim(0, numJobs)
@@ -19,6 +19,14 @@ def displayGnattChart(timeGraph,numJobs,title,requestGraph):
     prevIndex = 0
     jid = -1
     totalTimePerJob = [0]*numJobs
+    
+    index = 0
+    for i in range(len(requestGraph)):
+        print("Request Time"+ str(requestGraph[i]) + "Completion Time" + str(completionGraph[i]))
+        gnt.broken_barh([(requestGraph[i],completionGraph[i]-requestGraph[i])],(i,1),facecolors=('gray'))
+        index += 1
+    index = 0
+
     for i in timeGraph:
         if i != -1:
             jid = i
@@ -45,10 +53,7 @@ def displayGnattChart(timeGraph,numJobs,title,requestGraph):
     print("Total Time per Job",totalTimePerJob)
     #print("Job " + str(jid) + " has been active at " +str(prevIndex) + " cycles")
     
-    index = 0
-    for i in requestGraph:
-        gnt.broken_barh([(i,20)],(index,1),facecolors=('blue'))
-        index += 1
+    
 
     plt.draw()
         
