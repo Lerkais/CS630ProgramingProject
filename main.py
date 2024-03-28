@@ -79,7 +79,7 @@ def timeGraphToString(timeGraph):
     #print(strtoprnt)
     #print("----------------------------------------------------------------------------------")
 
-def FCFS(env,jobs,timeGraph):
+def FCFS(env,jobs,timeGraph): #1st algorithm
     startTime = env.now
     while not all(j.done for j in jobs):
         availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
@@ -102,7 +102,7 @@ def FCFS(env,jobs,timeGraph):
 
 
 
-def SRT(env,jobs,timeGraph):
+def SRT(env,jobs,timeGraph): #2nd algorithm
     startTime = env.now
     while not all(j.done for j in jobs):
         availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
@@ -117,7 +117,7 @@ def SRT(env,jobs,timeGraph):
                 j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
         
-def RR(env,jobs,timeGraph):
+def RR(env,jobs,timeGraph): #3rd algorithm
     startTime = env.now
     timerStart = env.now
     jindex = 0
@@ -141,7 +141,7 @@ def RR(env,jobs,timeGraph):
                 j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
         
-def SPN(env,jobs,timeGraph):
+def SPN(env,jobs,timeGraph): #4th algorithm
     startTime = env.now
     while not all(j.done for j in jobs):
         availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
@@ -156,7 +156,7 @@ def SPN(env,jobs,timeGraph):
                 j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
         
-def HRRN(env,jobs,timeGraph):
+def HRRN(env,jobs,timeGraph): #5th algorithm
     startTime = env.now
     while not all(j.done for j in jobs):
         availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
@@ -174,7 +174,7 @@ def HRRN(env,jobs,timeGraph):
                 j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
 
-def FB(env,jobs,timeGraph):
+def FB(env,jobs,timeGraph): #6th algorithm
     startTime = env.now
     while not all(j.done for j in jobs):
         availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
@@ -192,7 +192,7 @@ def FB(env,jobs,timeGraph):
         yield env.process(currentJob.step(env,timeGraph))
         
 
-class metaAlg:
+class metaAlg: #defines parts of the algorithm
     def __init__(self,alg,name):
         self.alg = alg
         self.name = name
@@ -201,7 +201,7 @@ class metaAlg:
 
 
 
-def JobDispatcher(env):
+def JobDispatcher(env): #controls processing time depending on algorithm
     jobs = [job(TimeDist) for i in range(numJobs)]
     top = ''
     for j in jobs:
@@ -251,7 +251,7 @@ def test(env):
     yield env.process(JobDispatcher(env))
 
 
-def main():
+def main(): #main executable of the program
     #print("hello world")
     env = Environment()
     env.process(test(env))
