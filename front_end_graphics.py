@@ -72,13 +72,3 @@ enter.place(relx=0.5, rely=.9, anchor=customtkinter.CENTER) #defines where the b
 
 
 mainMenu.mainloop() #displays main screen
-
-
-
-#create app class then possibly create top level class (2 different windows)
-
-
-
-#code from CustomTkinter CTk example code
-
-#button
