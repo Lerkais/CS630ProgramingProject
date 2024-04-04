@@ -1,74 +1,51 @@
-#3.30.24
-#this program may benefit from incorporating classes
-#this program may be merged with main.py program
-#this program would need someway to only run the algorithms chosen
-#other buttons can be added
-#import main
-import tkinter #use customtkinter
-import customtkinter #this one? This one works
-#import ttkbootstrap #this one? This one does not work
-#from ttkbootstrap.constants import * #more modern version
-def loadAlgorithm(): #checkbox function
-    print("We will load the value")
+#4.4.24
+#The point of this program is to great a front end for the user to interact with.
+import customtkinter #A custom made more updated version of tkinter
 
-def button_event(): #defines action when button is pressed
-    if check_var.get() == "on" or check_var2.get() == "on" or check_var3.get() == "on" or check_var4.get() == "on" or check_var5.get() == "on": #first checks condition if nothing was clicked
-        print("Button pressed") #test value so far
-        label.configure(text="You clicked it") #checks to see if check mark was clicked
-        #main.JobDispatcher() #look at how to load the algorithm in
-    #eventually want to link with functions from main program
+def button_event(): #defines action when button is pressed #should work fine as standaline
+    if check_var1.get() == "on" or check_var2.get() == "on" or check_var3.get() == "on" or check_var4.get() == "on" or check_var5.get() == "on": #first checks condition if nothing was clicked
+        label.configure(text="You clicked something!") #checks to see if check mark was clicked
     else:
-        label.configure(text="You did not click anything")
+        label.configure(text="You did not click anything.")
+
+def main_window(dimensions = "800x600", top_Title = "Algorithm Selector"):
+    global mainMenu
+    mainMenu = customtkinter.CTk() #creates main Menu window
+    mainMenu.geometry(dimensions) #defines size of the window
+    mainMenu.title(top_Title)
+
+def check_box(text_input = "Algorithm", pady=20):
+    global check_var
+    check_var = customtkinter.StringVar(value = "off") #custom string
+    check = customtkinter.CTkCheckBox(mainMenu, text=text_input, variable=check_var, #label 1
+                                    onvalue="on", offvalue="off", #command can be used to link to which ever algorithm we want
+                                    fg_color = "blue")
+    check.pack(pady=pady) #first box
+    return check_var
+
+def enter_button(button_label = "Enter", relx = 0.5, rely = .9, pady = 60):
+    global label
+    enter = customtkinter.CTkButton(master=mainMenu, text = button_label, command=button_event) #main button user presses when they want to enter
+    enter.place(relx=relx, rely=rely, anchor=customtkinter.CENTER) #defines where the button goes
+    label = customtkinter.CTkLabel(mainMenu, text="")
+    label.pack(pady=pady)
         
-#def checkbox_event():
-#   print("checkbox toggled, current value ", check_var.get())
+def createMainScreen(): #call this if a program wants the interface
+    global check_var1, check_var2, check_var3, check_var4, check_var5 #(declares variables so they
+    #can communicate with other methods)
 
-mainMenu = customtkinter.CTk() #creates main Menu window
-mainMenu.geometry("800x600") #defines size of the window
-mainMenu.title("Algorithm Selector")
+    main_window() #generates the main window
 
-check_var = customtkinter.StringVar(value = "off") #custom string
-check1 = customtkinter.CTkCheckBox(mainMenu, text="Algorithm 1", variable=check_var, #label 1
-                                    onvalue="on", offvalue="off", command=loadAlgorithm,
-                                    fg_color = "blue")
-check1.pack(pady=20) #first box
+    check_var1 = check_box("FCFS", 20) #first box
 
-check_var2 = customtkinter.StringVar(value = "off") #custom string
-check2 = customtkinter.CTkCheckBox(mainMenu, text="Algorithm 2", variable=check_var2, #label 2
-                                    onvalue="on", offvalue="off", command=loadAlgorithm,
-                                    fg_color = "blue")
-check2.pack(pady=24) #second box
+    check_var2 = check_box("SRT", 24) #second box
 
-check_var3 = customtkinter.StringVar(value = "off") #custom string
-check3 = customtkinter.CTkCheckBox(mainMenu, text="Algorithm 3", variable=check_var3, #label 3
-                                    onvalue="on", offvalue="off", command=loadAlgorithm,
-                                    fg_color = "blue")
-check3.pack(pady=28) #third box
+    check_var3 = check_box("RR", 28) #third box
 
-check_var4 = customtkinter.StringVar(value = "off") #custom string
-check4 = customtkinter.CTkCheckBox(mainMenu, text="Algorithm 4", variable=check_var4, #label 4
-                                    onvalue="on", offvalue="off", command=loadAlgorithm,
-                                    fg_color = "blue")
-check4.pack(pady=32) #fourth box
+    check_var4 = check_box("SPN", 32) #fourth box
 
-check_var5 = customtkinter.StringVar(value = "off") #custom string
-check5 = customtkinter.CTkCheckBox(mainMenu, text="Algorithm 5", variable=check_var5, #label 5
-                                    onvalue="on", offvalue="off", command=loadAlgorithm,
-                                    fg_color = "blue")
-check5.pack(pady=36) #fifth box
+    check_var5 = check_box("HRRN", 36) #fifth box
 
+    enter_button() #allows user to send input to be analyzed
 
-#save label for if user does not press anything
-label =customtkinter.CTkLabel(mainMenu, text="")
-label.pack(pady=60)
-
-
-
-
-enter = customtkinter.CTkButton(master=mainMenu, text = "Enter", command=button_event) #main button user presses when they want to enter
-enter.place(relx=0.5, rely=.9, anchor=customtkinter.CENTER) #defines where the button goes
-
-
-
-
-mainMenu.mainloop() #displays main screen
+    mainMenu.mainloop() #displays main screen and responds to inputs
