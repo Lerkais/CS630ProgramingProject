@@ -1,10 +1,13 @@
-#4.6.24
+#4.10.24
 #The point of this program is to great a front end for the user to interact with.
 import customtkinter #A custom made more updated version of tkinter
+
 
 def button_event(): #defines action when button is pressed #should work fine as standaline
     if check_var1.get() == "on" or check_var2.get() == "on" or check_var3.get() == "on" or check_var4.get() == "on" or check_var5.get() == "on" or check_var6.get() == "on": #first checks condition if nothing was clicked
         label.configure(text="You clicked something!") #checks to see if check mark was clicked
+        global toLoadAlgorithm
+        toLoadAlgorithm= [check_var1.get(), check_var2.get(), check_var3.get(), check_var4.get(), check_var5.get(), check_var6.get()]
     else:
         label.configure(text="You did not click anything.")
 
@@ -35,10 +38,6 @@ def arrivalValue(input): #sliding
 
 def burstValue(input):
     burstLabel.configure(text=int(input))
-
-def tupleAction(v1= ()):
-    print(v1)
-    return v1
         
 def createMainScreen(): #call this if a program wants the interface
     global check_var1, check_var2, check_var3, check_var4, check_var5, check_var6 #(declares variables so they
@@ -71,22 +70,28 @@ def arrivalBurstTimeInput():
     arrivalLabel.pack(pady = 40)
     arrivalSlider.set(0)
 
-
-
     burstSlider = customtkinter.CTkSlider(mainMenu, from_= 0, to=100, command=burstValue)
     burstSlider.pack(pady = 60)
     global burstLabel
     burstLabel = customtkinter.CTkLabel(mainMenu, text=burstSlider.get(), font=("Helvetica", 18))
     burstLabel.pack(pady=70)
     burstSlider.set(0)
-    #tupleStorage = (arrivalSlider.get(), burstSlider.get()) #work on tuples later, first get functionality of connecting the two screens
-    enter_button(eventAction=mainMenu.destroy) #resolve the error codes later
+    enter_button(eventAction = mainMenu.destroy) #resolve the error codes later
     mainMenu.mainloop()
+    global tupelStorage
+    tupleStorage = (int(arrivalSlider.get()), int(burstSlider.get())) #work on tuples later, first get functionality of connecting the two screens
+    print(tupleStorage) #for error checking
+    
     
 
 #revise mainMenu to something else unique to the first tab to see if errors can be avoided
-#arrivalBurstTimeInput() #work on modularizing it and making two separate #when trying to run back to back, creates weird text in terminal
-#createMainScreen()
-#createMainScreen()
 
-
+#arrivalBurstTimeInput() #work on modularizing it and making two separate #when trying to r
+#createMainScreen()
+#print(toLoadAlgorithm)
+#we got list and tuple to store data. 
+#(There is a glitch where removing one tab leaves some processes running causing
+#intrepreter to not like it. Additionally, there should be a way to use alternative methods
+#other than global and using different mainMenu option as that seems to cause issues)
+#This issue is not program crashing and the program works
+#but can cause instability in the program.
