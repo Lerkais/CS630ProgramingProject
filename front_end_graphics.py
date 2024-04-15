@@ -29,7 +29,7 @@ def check_box(text_input = "Algorithm", pady=20):
 
 def enter_button(button_label = "Enter", relx = 0.5, rely = .9, pady = 60, eventAction = button_event):
     global label
-    enter = customtkinter.CTkButton(master=mainMenu, text = button_label, command=eventAction) #main button user presses when they want to enter
+    enter = customtkinter.CTkButton(master=mainMenu, text = button_label, command=mainMenu.destroy) #main button user presses when they want to enter #CHANGED TO QUIT BY JAMES
     enter.place(relx=relx, rely=rely, anchor=customtkinter.CENTER) #defines where the button goes
     label = customtkinter.CTkLabel(mainMenu, text="")
     label.pack(pady=pady)
@@ -107,14 +107,89 @@ def arrivalBurstTimeInput():
         
     print(arrivalListStorage)
     print(burstListStorage)
-    tupleStorageValues = list(zip(arrivalListStorage, burstListStorage))
+    tupleStorageValues = list(zip(arrivalListStorage, burstListStorage)) 
     print(tupleStorageValues)
     return tupleStorageValues #returns tuple value
     
 
     #work on tuples later, first get functionality of connecting the two screens
     
+
+jobretlist = []
+numberOfJobsInput = 0
+arrivalVar = None
+burstVar = None
+arrivalValue = 0
+burstValue = 0
+arrburLabel = ""
+def tracerGetJob():
+    global arrivalValue, burstValue,arrivalEntry, burstEntry,arrburLabel
+    arrivalValue = arrivalEntry.get()
+    burstValue = burstEntry.get()
+    #arrburLabel = "Arr/burst: "+ str(arrivalValue) + "/" + str(burstValue)
+    #print(arrburLabel)
+
+def editedArrivalBurstTimeInput():
+    global numberOfJobsInput
+
+    for i in range(numberOfJobsInput): #loop to get the jobs input
+        jobretlist.append(getJob(i))
+        
+    return jobretlist
+   
+
+
+def getJob(i): #function to get job through tkinter graphics window seperate from arrivalBurstTimeInput using text entry boxes
+    main_window()
+    global arrivalValue, burstValue
+
+    job_label = customtkinter.CTkLabel(mainMenu, text="Please enter the arrival time and burst time for job "+str(i+1)+".\nArrival Time:", font=("Helventica", 18))
+    job_label.pack(pady = 20)
+    global arrivalEntry, arrivalVar
+    arrivalVar = customtkinter.StringVar()
+    arrivalEntry = customtkinter.CTkEntry(mainMenu,textvariable=arrivalVar)
+    arrivalEntry.pack(pady = 40)
+    burst_label = customtkinter.CTkLabel(mainMenu, text="Burst Time:", font=("Helventica", 18))
+    burst_label.pack(pady = 40)
+    global burstEntry, burstVar
+    burstVar = customtkinter.StringVar()
+    burstEntry = customtkinter.CTkEntry(mainMenu,textvariable=burstVar)
+    burstEntry.pack(pady = 80)
+
+    arrivalVar.trace("w", lambda *args: tracerGetJob())
+    burstVar.trace("w", lambda *args: tracerGetJob())
+    enter_button(eventAction=mainMenu.destroy)
+
+    mainMenu.mainloop()
     
+    return int(arrivalValue), int(burstValue)
+
+numJobsVar = None
+numJobs = 0
+
+def tracerNumJobs():
+    global numJobsVar, numJobs
+    numJobs = int(numJobsVar.get())
+    #print(numJobs)
+
+def numberOfJobsEntry(): #same as slider but with text entry
+    main_window()
+
+    global numJobsVar, numJobs
+    numJobsVar = customtkinter.StringVar()
+
+    begin_label = customtkinter.CTkLabel(mainMenu, text="Please enter the number of jobs you would like to process.\nOnce entered, please press enter to continue.", font=("Helventica", 18))
+    begin_label.pack(pady = 20)
+    numjobs = customtkinter.CTkEntry(mainMenu,textvariable=numJobsVar)
+    numjobs.pack(pady = 40)
+    numJobsVar.trace("w",lambda *args: tracerNumJobs())
+    enter_button(eventAction=mainMenu.destroy)
+    mainMenu.mainloop()
+
+    #print("numjobs: ", numJobs)
+    return numJobs
+    
+
 def numberOfJobs():
     main_window()
     begin_label = customtkinter.CTkLabel(mainMenu, text="Please select the number of jobs you would like to process.\nOnce selected, please press enter to continue.", font=("Helventica", 18))
@@ -129,6 +204,8 @@ def numberOfJobs():
     enter_button(eventAction=mainMenu.destroy)
     mainMenu.mainloop()
     numberOfJobsInput = int(numberOfJobsSlider.get())
+    
+
 
 #intended order of execution  
 #createMainScreen() #modularize beginning label

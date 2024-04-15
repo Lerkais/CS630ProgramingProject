@@ -44,7 +44,7 @@ results = []
 
 class job:
     def __init__(self,time):
-        self.timeRemaining = time()
+        self.timeRemaining = time
         self.burstTime = self.timeRemaining
         self.requestTime = 0
         self.jid = 0
@@ -202,8 +202,9 @@ class metaAlg: #defines parts of the algorithm
 jobs = []
 
 def JobDispatcher(env): #controls processing time depending on algorithm
+    global jobs
     if(jobs == []):
-        jobs = [job(TimeDist) for i in range(numJobs)]
+        jobs = [job(TimeDist()) for i in range(numJobs)]
         top = ''
         for j in jobs:
             j.requestTime = randomRequestTime()   
@@ -242,7 +243,7 @@ def JobDispatcher(env): #controls processing time depending on algorithm
                     if j.jid == i:
                         j.completionTime = index
                 index+=1
-        graphics.displayGnattChart(algo.timeGraph,numJobs,algo.name,requestGraph,completionGraph=[j.completionTime for j in jobs])
+        graphics.displayGnattChart(algo.timeGraph,len(jobs),algo.name,requestGraph,completionGraph=[j.completionTime for j in jobs])
     graphics.initGraph()
     pass
 
@@ -263,6 +264,7 @@ def mainw(): #main executable of the program
 
 
 def main(js):
+    global jobs
     jobs = js;
     mainw()
     
