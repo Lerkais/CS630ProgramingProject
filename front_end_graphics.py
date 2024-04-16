@@ -1,4 +1,4 @@
-#4.6.24 4.13.24 4.14.24
+#4.16.24
 #The point of this program is to great a front end for the user to interact with.
 import customtkinter #A custom made more updated version of tkinter
 
@@ -29,7 +29,7 @@ def check_box(text_input = "Algorithm", pady=20):
 
 def enter_button(button_label = "Enter", relx = 0.5, rely = .9, pady = 60, eventAction = button_event):
     global label
-    enter = customtkinter.CTkButton(master=mainMenu, text = button_label, command=mainMenu.destroy) #main button user presses when they want to enter #CHANGED TO QUIT BY JAMES
+    enter = customtkinter.CTkButton(master=mainMenu, text = button_label, command=eventAction) #main button user presses when they want to enter #CHANGED TO QUIT BY JAMES
     enter.place(relx=relx, rely=rely, anchor=customtkinter.CENTER) #defines where the button goes
     label = customtkinter.CTkLabel(mainMenu, text="")
     label.pack(pady=pady)
@@ -51,7 +51,7 @@ def tupleAction(v1= ()):
 def createMainScreen(): #call this if a program wants the interface
     global check_var1, check_var2, check_var3, check_var4, check_var5, check_var6 #(declares variables so they
     #can communicate with other methods)
-    main_window() #generates the main window
+    main_window("1200x1000") #generates the main window
 
     begin_label = customtkinter.CTkLabel(mainMenu, text="Welcome to the Operating System Algorithm Selector.\n To start the program please check the algoritm(s) you would like to test.", font=("Helventica", 18))
     begin_label.pack(pady = 20)
@@ -180,7 +180,7 @@ def numberOfJobsEntry(): #same as slider but with text entry
 
     begin_label = customtkinter.CTkLabel(mainMenu, text="Please enter the number of jobs you would like to process.\nOnce entered, please press enter to continue.", font=("Helventica", 18))
     begin_label.pack(pady = 20)
-    numjobs = customtkinter.CTkEntry(mainMenu,textvariable=numJobsVar)
+    numjobs = customtkinter.CTkEntry(mainMenu,textvariable=numJobsVar) #put logic to handle invalid inputs
     numjobs.pack(pady = 40)
     numJobsVar.trace("w",lambda *args: tracerNumJobs())
     enter_button(eventAction=mainMenu.destroy)
@@ -212,15 +212,6 @@ def numberOfJobs():
 #numberOfJobs()   #modularize beginning label, (modularize the sliders?)
 #arrivalBurstTimeInput() #modularize beginning label, (modularize the sliders?)
  
-
-
-#things to do: 
-
-#try to modularize the code? (sliders)
-#try to make double click a single click
-#try to minimize the use of global variables and rely more on returns
-#format the windows visuals
-#remove debugging code
 
 
 
