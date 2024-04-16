@@ -1,12 +1,13 @@
+#4.16.24
 from algos import *
 import front_end_graphics as g 
 
 g.createMainScreen()
-algosToRun = [g.check_var1.get() == 'on', g.check_var2.get() == 'on', g.check_var3.get() == 'on', g.check_var4.get() == 'on', g.check_var5.get() == 'on', g.check_var6.get() == 'on']
+algosToRun = g.toLoadAlgorithm #this makes it so that the user has to select at least one option
 print(algosToRun)
 
 
-g.numberOfJobsInput = g.numberOfJobsEntry()
+g.numberOfJobsInput = g.numberOfJobsEntry() #come up with way to have error validation for 0, negative numbers, other text, numbers too large to crash system
 jobsInput = g.editedArrivalBurstTimeInput()
 print(jobsInput)
 
@@ -20,3 +21,7 @@ for i in range(g.numberOfJobsInput):
 
 main(jobslist)
 
+#updates needed: 
+#error handle for inputs + include mechanism to tell the user that they entered an incorrect input
+#have algorithms load only the selected ones
+#Add unit measurement for time.
