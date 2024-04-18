@@ -1,7 +1,7 @@
-#4.16.24
+#4.18.24
 #The point of this program is to great a front end for the user to interact with.
 import customtkinter #A custom made more updated version of tkinter
-
+import time #for sleep()
 
 def button_event(): #defines action when button is pressed #should work fine as standaline
     if check_var1.get() == "on" or check_var2.get() == "on" or check_var3.get() == "on" or check_var4.get() == "on" or check_var5.get() == "on" or check_var6.get() == "on": #first checks condition if nothing was clicked
@@ -112,9 +112,6 @@ def arrivalBurstTimeInput():
     return tupleStorageValues #returns tuple value
     
 
-    #work on tuples later, first get functionality of connecting the two screens
-    
-
 jobretlist = []
 numberOfJobsInput = 0
 arrivalVar = None
@@ -137,7 +134,14 @@ def editedArrivalBurstTimeInput():
         
     return jobretlist
    
-
+def errorHandlerCode(): #for handling if user tries to enter a negative number or any character not a number
+    main_window("600x400", "Error Condition")
+    begin_label = customtkinter.CTkLabel(mainMenu, 
+        text="Since an invalid character\nwas attempted to be entered,\n this program needs to be restarted.\nPlease close this window and\n press the enter button on the other tab."
+        , font=("Helventica", 28))
+    begin_label.pack(pady = 20)
+    mainMenu.mainloop()
+    exit()
 
 def getJob(i): #function to get job through tkinter graphics window seperate from arrivalBurstTimeInput using text entry boxes
     main_window()
@@ -169,8 +173,13 @@ numJobs = 0
 
 def tracerNumJobs():
     global numJobsVar, numJobs
-    numJobs = int(numJobsVar.get())
-    #print(numJobs)
+    if int(numJobs) <= 0: #needs work?
+        numJobs == "1" #if user enters negative numbers or 0, the program assumes user meant 1
+    try:
+        numJobs = int(numJobsVar.get()) #tries to run the code
+    except ValueError: #if user tries to enter anything other than a number the program will end #can back space if not bank
+        errorHandlerCode() #cannot be tested because whenever user enters a character and enters, the program runs default values
+ 
 
 def numberOfJobsEntry(): #same as slider but with text entry
     main_window()
@@ -205,14 +214,3 @@ def numberOfJobs():
     mainMenu.mainloop()
     numberOfJobsInput = int(numberOfJobsSlider.get())
     
-
-
-#intended order of execution  
-#createMainScreen() #modularize beginning label
-#numberOfJobs()   #modularize beginning label, (modularize the sliders?)
-#arrivalBurstTimeInput() #modularize beginning label, (modularize the sliders?)
- 
-
-
-
-
