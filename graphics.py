@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 def initGraph():
     plt.show()
 
+
+
+
 def displayGnattChart(timeGraph,numJobs,title,requestGraph,completionGraph):
     #Format will be an arra of what job is active at each time step
     fig, gnt = plt.subplots()

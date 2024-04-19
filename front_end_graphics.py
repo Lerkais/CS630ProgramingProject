@@ -183,10 +183,12 @@ def tracerNumJobs():
     global numJobsVar, numJobs
     if int(numJobs) <= 0: #needs work?
         numJobs == "1" #if user enters negative numbers or 0, the program assumes user meant 1
+    elif numJobs == "":
+        return;
     try:
         numJobs = int(numJobsVar.get()) #tries to run the code
-    except ValueError: #if user tries to enter anything other than a number the program will end #can back space if not bank
-        errorHandlerCode() #cannot be tested because whenever user enters a character and enters, the program runs default values
+    except : #if user tries to enter anything other than a number the program will end #can back space if not bank
+        pass;
  
 
 def numberOfJobsEntry(): #same as slider but with text entry
@@ -199,12 +201,20 @@ def numberOfJobsEntry(): #same as slider but with text entry
     numjobs = customtkinter.CTkEntry(mainMenu,textvariable=numJobsVar) #put logic to handle invalid inputs
     numjobs.pack(pady = 40)
     numJobsVar.trace("w",lambda *args: tracerNumJobs())
-    enter_button(eventAction=mainMenu.destroy)
+    enter_button(eventAction=enterButton) 
     mainMenu.mainloop()
 
     #print("numjobs: ", numJobs)
     return numJobs
     
+def enterButton():
+    
+    try:
+        numJobs = int(numJobsVar.get()) #tries to run the code
+    except ValueError: #if user tries to enter anything other than a number the program will end #can back space if not bank
+        errorHandlerCode() #cannot be tested because whenever user enters a character and enters, the program runs default values
+    mainMenu.destroy()
+
 
 def numberOfJobs():
     main_window()
