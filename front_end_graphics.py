@@ -1,4 +1,4 @@
-#4.18.24
+#4.19.24
 #The point of this program is to great a front end for the user to interact with.
 import customtkinter #A custom made more updated version of tkinter
 import time #for sleep()
@@ -8,7 +8,7 @@ def button_event(): #defines action when button is pressed #should work fine as 
         label.configure(text="Please click again to confirm the selected options.") #checks to see if check mark was clicked
         global toLoadAlgorithm
         toLoadAlgorithm = [check_var1.get(), check_var2.get(), check_var3.get(), check_var4.get(), check_var5.get(), check_var6.get()]
-        enter_button(eventAction=mainMenu.destroy)
+        enter_button(eventAction=mainMenu.destroy) #find way to make it 1 click
     else:
         label.configure(text="Please select select the appropriate options.")
 
@@ -144,29 +144,37 @@ def errorHandlerCode(): #for handling if user tries to enter a negative number o
     exit()
 
 def getJob(i): #function to get job through tkinter graphics window seperate from arrivalBurstTimeInput using text entry boxes
-    main_window()
     global arrivalValue, burstValue
-
-    job_label = customtkinter.CTkLabel(mainMenu, text="Please enter the arrival time and burst time for job "+str(i+1)+".\nArrival Time:", font=("Helventica", 18))
-    job_label.pack(pady = 20)
     global arrivalEntry, arrivalVar
-    arrivalVar = customtkinter.StringVar()
-    arrivalEntry = customtkinter.CTkEntry(mainMenu,textvariable=arrivalVar)
-    arrivalEntry.pack(pady = 40)
-    burst_label = customtkinter.CTkLabel(mainMenu, text="Burst Time:", font=("Helventica", 18))
-    burst_label.pack(pady = 40)
     global burstEntry, burstVar
-    burstVar = customtkinter.StringVar()
-    burstEntry = customtkinter.CTkEntry(mainMenu,textvariable=burstVar)
-    burstEntry.pack(pady = 80)
-
-    arrivalVar.trace("w", lambda *args: tracerGetJob())
-    burstVar.trace("w", lambda *args: tracerGetJob())
-    enter_button(eventAction=mainMenu.destroy)
-
-    mainMenu.mainloop()
-    
-    return int(arrivalValue), int(burstValue)
+    checker = 0
+    lock = 0
+    while lock == 0:
+        main_window()
+        job_label = customtkinter.CTkLabel(mainMenu, text="Please enter the arrival time and burst time for job "+str(i+1)+".\nArrival Time:", font=("Helventica", 18))
+        job_label.pack(pady = 20)
+        arrivalVar = customtkinter.StringVar()
+        arrivalEntry = customtkinter.CTkEntry(mainMenu,textvariable=arrivalVar)
+        arrivalEntry.pack(pady = 40)
+        burst_label = customtkinter.CTkLabel(mainMenu, text="Burst Time:", font=("Helventica", 18))
+        burst_label.pack(pady = 40)
+        burstVar = customtkinter.StringVar()
+        burstEntry = customtkinter.CTkEntry(mainMenu,textvariable=burstVar)
+        burstEntry.pack(pady = 80)
+        arrivalVar.trace("w", lambda *args: tracerGetJob())
+        burstVar.trace("w", lambda *args: tracerGetJob())
+        enter_button(eventAction=mainMenu.destroy)
+        mainMenu.mainloop()
+        try: 
+            checker = int(arrivalValue) #if values entered cannot work with int
+            checker = int(burstValue) #then the user is reprompted
+            if int(arrivalValue) <= 0: #if user enters int that does not make sense, program
+                arrivalValue = "1" #assumes the user meant 1
+            if int(burstValue) <= 0:
+                burstValue = "1"
+            return int(arrivalValue), int(burstValue) #if works value returns
+        except: #if does not work, reset loop until user complies
+            lock = 0 #results in loop to repeat again
 
 numJobsVar = None
 numJobs = 0
@@ -183,7 +191,6 @@ def tracerNumJobs():
 
 def numberOfJobsEntry(): #same as slider but with text entry
     main_window()
-
     global numJobsVar, numJobs
     numJobsVar = customtkinter.StringVar()
 
