@@ -7,8 +7,10 @@ def button_event(): #defines action when button is pressed #should work fine as 
     if check_var1.get() == "on" or check_var2.get() == "on" or check_var3.get() == "on" or check_var4.get() == "on" or check_var5.get() == "on" or check_var6.get() == "on": #first checks condition if nothing was clicked
         label.configure(text="Please click again to confirm the selected options.") #checks to see if check mark was clicked
         global toLoadAlgorithm
-        toLoadAlgorithm = [check_var1.get(), check_var2.get(), check_var3.get(), check_var4.get(), check_var5.get(), check_var6.get()]
-        enter_button(eventAction=mainMenu.destroy) #find way to make it 1 click
+        toLoadAlgorithm = [check_var1.get() == "on", check_var2.get() == "on", check_var3.get() == "on", check_var4.get() == "on", check_var5.get() == "on", check_var6.get() == "on"]
+        #enter_button(eventAction=mainMenu.destroy) #find way to make it 1 click
+        mainMenu.withdraw()
+        mainMenu.quit()
     else:
         label.configure(text="Please select select the appropriate options.")
 
@@ -29,7 +31,7 @@ def check_box(text_input = "Algorithm", pady=20):
 
 def enter_button(button_label = "Enter", relx = 0.5, rely = .9, pady = 60, eventAction = button_event):
     global label
-    enter = customtkinter.CTkButton(master=mainMenu, text = button_label, command=eventAction) #main button user presses when they want to enter #CHANGED TO QUIT BY JAMES
+    enter = customtkinter.CTkButton(master=mainMenu, text = button_label, command=eventAction) #main button user presses when they want to enter
     enter.place(relx=relx, rely=rely, anchor=customtkinter.CENTER) #defines where the button goes
     label = customtkinter.CTkLabel(mainMenu, text="")
     label.pack(pady=pady)
@@ -51,7 +53,7 @@ def tupleAction(v1= ()):
 def createMainScreen(): #call this if a program wants the interface
     global check_var1, check_var2, check_var3, check_var4, check_var5, check_var6 #(declares variables so they
     #can communicate with other methods)
-    main_window("1200x1000") #generates the main window
+    main_window("800x600") #generates the main window
 
     begin_label = customtkinter.CTkLabel(mainMenu, text="Welcome to the Operating System Algorithm Selector.\n To start the program please check the algoritm(s) you would like to test.", font=("Helventica", 18))
     begin_label.pack(pady = 20)
@@ -178,42 +180,51 @@ def getJob(i): #function to get job through tkinter graphics window seperate fro
 
 numJobsVar = None
 numJobs = 0
+numjobs =None
 
-def tracerNumJobs():
-    global numJobsVar, numJobs
-    if int(numJobs) <= 0: #needs work?
-        numJobs == "1" #if user enters negative numbers or 0, the program assumes user meant 1
-    elif numJobs == "":
-        return;
-    try:
-        numJobs = int(numJobsVar.get()) #tries to run the code
-    except : #if user tries to enter anything other than a number the program will end #can back space if not bank
-        pass;
+
  
 
 def numberOfJobsEntry(): #same as slider but with text entry
     main_window()
-    global numJobsVar, numJobs
+    global numJobsVar, numJobs,numjobs
     numJobsVar = customtkinter.StringVar()
 
     begin_label = customtkinter.CTkLabel(mainMenu, text="Please enter the number of jobs you would like to process.\nOnce entered, please press enter to continue.", font=("Helventica", 18))
     begin_label.pack(pady = 20)
     numjobs = customtkinter.CTkEntry(mainMenu,textvariable=numJobsVar) #put logic to handle invalid inputs
     numjobs.pack(pady = 40)
-    numJobsVar.trace("w",lambda *args: tracerNumJobs())
-    enter_button(eventAction=enterButton) 
+    
+    
+    def tracerNumJobs(*args):
+        global numJobs
+        value = numJobsVar.get()
+        print("Value:", value)
+        try:
+            numJobs = int(value)
+        except ValueError:
+            print("Invalid input:", value)
+
+    numJobsVar.trace_add("write", tracerNumJobs)
+    
+    def enterButton():
+        try:
+            numJobs = numjobs.get() #tries to run the code
+        except ValueError: #if user tries to enter anything other than a number the program will end #can back space if not bank
+            #errorHandlerCode() #cannot be tested because whenever user enters a character and enters, the program runs default values
+            print("Error")
+        mainMenu.withdraw()
+        mainMenu.quit()
+
+    enter_button(eventAction=lambda *args: enterButton()) 
     mainMenu.mainloop()
 
-    #print("numjobs: ", numJobs)
+
+
+    print("numjobs: ", numJobs)
     return numJobs
     
-def enterButton():
-    
-    try:
-        numJobs = int(numJobsVar.get()) #tries to run the code
-    except ValueError: #if user tries to enter anything other than a number the program will end #can back space if not bank
-        errorHandlerCode() #cannot be tested because whenever user enters a character and enters, the program runs default values
-    mainMenu.destroy()
+
 
 
 def numberOfJobs():

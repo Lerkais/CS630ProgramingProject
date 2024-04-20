@@ -3,14 +3,19 @@ import matplotlib.pyplot as plt
 
 
 def initGraph():
+    manager = plt.get_current_fig_manager()
+    #manager.full_screen_toggle()
+    plt.subplots_adjust(wspace=.25,hspace=.35)
     plt.show()
 
-
-
+fig,gntl = plt.subplots(2,3)
+fig.set_size_inches(10,6)
+gcount = 0
 
 def displayGnattChart(timeGraph,numJobs,title,requestGraph,completionGraph):
     #Format will be an arra of what job is active at each time step
-    fig, gnt = plt.subplots()
+    global fig,gntl,gcount
+    gnt = gntl[gcount%2,gcount%3]
     gnt.set_ylim(0, numJobs)
     gnt.set_xlim(0, len(timeGraph))
     gnt.set_xlabel('Time')
@@ -55,9 +60,5 @@ def displayGnattChart(timeGraph,numJobs,title,requestGraph,completionGraph):
     totalTimePerJob[jid] += barLen
     print("Total Time per Job",totalTimePerJob)
     #print("Job " + str(jid) + " has been active at " +str(prevIndex) + " cycles")
-    
-    
-
-    plt.draw()
-        
+    gcount += 1
         

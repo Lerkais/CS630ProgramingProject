@@ -36,11 +36,8 @@ chanceForIO = .3
 IODist = randomIO
 
 #Storage mechanisms
-
-
-
-
 results = []
+algostorun = [False,False,False,False,False,False] #set by external scripts
 
 class job:
     def __init__(self,time):
@@ -230,6 +227,9 @@ def JobDispatcher(env): #controls processing time depending on algorithm
     hrrn = metaAlg(HRRN,"Highest Response Ratio Next")
     fb = metaAlg(FB,"Feedback")
     algos = [fcfs,srt,rr,spn,hrrn,fb]
+    for boo in algostorun:
+        if not boo:
+            algos.remove(algos[algostorun.index(boo)])
     for algo in algos:
         yield env.process(algo.alg(env,copy.deepcopy(jobs),algo.timeGraph))
         timeGraphToString(algo.timeGraph)

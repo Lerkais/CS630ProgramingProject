@@ -5,6 +5,7 @@ import front_end_graphics as g
 g.createMainScreen()
 algosToRun = g.toLoadAlgorithm #this makes it so that the user has to select at least one option
 print(algosToRun)
+algostorun = algosToRun
 
 
 g.numberOfJobsInput = g.numberOfJobsEntry() #come up with way to have error validation for 0, negative numbers, other text, numbers too large to crash system
