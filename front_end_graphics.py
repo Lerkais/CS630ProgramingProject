@@ -9,8 +9,9 @@ def button_event(): #defines action when button is pressed #should work fine as 
         global toLoadAlgorithm
         toLoadAlgorithm = [check_var1.get() == "on", check_var2.get() == "on", check_var3.get() == "on", check_var4.get() == "on", check_var5.get() == "on", check_var6.get() == "on"]
         #enter_button(eventAction=mainMenu.destroy) #find way to make it 1 click
-        mainMenu.withdraw()
-        mainMenu.quit()
+        #mainMenu.withdraw()
+        #mainMenu.quit()
+        mainMenu.destroy()
     else:
         label.configure(text="Please select select the appropriate options.")
 
@@ -213,8 +214,7 @@ def numberOfJobsEntry(): #same as slider but with text entry
         except ValueError: #if user tries to enter anything other than a number the program will end #can back space if not bank
             #errorHandlerCode() #cannot be tested because whenever user enters a character and enters, the program runs default values
             print("Error")
-        mainMenu.withdraw()
-        mainMenu.quit()
+        mainMenu.destroy()
 
     enter_button(eventAction=lambda *args: enterButton()) 
     mainMenu.mainloop()

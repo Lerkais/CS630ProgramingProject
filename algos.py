@@ -197,9 +197,10 @@ class metaAlg: #defines parts of the algorithm
         
 
 jobs = []
+algostorun = [True,True,True,True,True,True]
 
 def JobDispatcher(env): #controls processing time depending on algorithm
-    global jobs
+    global jobs,algostorun
     if(jobs == []):
         jobs = [job(TimeDist()) for i in range(numJobs)]
         top = ''
@@ -227,6 +228,7 @@ def JobDispatcher(env): #controls processing time depending on algorithm
     hrrn = metaAlg(HRRN,"Highest Response Ratio Next")
     fb = metaAlg(FB,"Feedback")
     algos = [fcfs,srt,rr,spn,hrrn,fb]
+    graphics.graphSetup()
     for boo in algostorun:
         if not boo:
             algos.remove(algos[algostorun.index(boo)])
@@ -267,4 +269,4 @@ def main(js):
     global jobs
     jobs = js;
     mainw()
-    
+#mainw()
