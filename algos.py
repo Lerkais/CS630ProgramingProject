@@ -52,13 +52,15 @@ class job:
         self.completionTime = 0
 
     def step(self,env,timeGraph):
-        self.timeRemaining -= 1
-        timeGraph.append(self.jid)
+        if not self.done:
+            self.timeRemaining -= 1
+            timeGraph.append(self.jid)
+            yield env.timeout(1)
         if self.timeRemaining <= 0:
             self.done = True
         else:
             self.done = False
-        yield env.timeout(1)
+        
 
 def timeGraphToString(timeGraph):
     cj = timeGraph[0];
@@ -78,18 +80,19 @@ def timeGraphToString(timeGraph):
 
 def FCFS(env,jobs,timeGraph): #1st algorithm
     startTime = env.now
+    availableJobs = jobs
     while not all(j.done for j in jobs):
-        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        for j in availableJobs:
+            if j.done:
+                jobs.remove(j)
+                j.completionTime = env.now
+        availableJobs = [j for j in jobs if j.requestTime <= env.now - startTime]
         if(len(availableJobs) == 0):
             yield env.timeout(1)
             timeGraph.append(-1)
             continue
         else:
             availableJobs = sorted(availableJobs,key=lambda x: x.requestTime)
-            for j in availableJobs:
-                if j.done:
-                    jobs.remove(j)
-                    j.completionTime = env.now
             currentJob = availableJobs[0]
             yield env.process(currentJob.step(env,timeGraph))
         
@@ -101,25 +104,33 @@ def FCFS(env,jobs,timeGraph): #1st algorithm
 
 def SRT(env,jobs,timeGraph): #2nd algorithm
     startTime = env.now
+    availableJobs = jobs
     while not all(j.done for j in jobs):
-        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        for j in availableJobs:
+            if j.done:
+                jobs.remove(j)
+                j.completionTime = env.now
+        availableJobs = [j for j in jobs if j.requestTime <= env.now - startTime]
         if(len(availableJobs) == 0):
             yield env.timeout(1)
             timeGraph.append(-1)
             continue
-        currentJob = min(availableJobs, key = lambda x: x.timeRemaining)
-        for j in jobs:
-            if j.done:
-                jobs.remove(j)
-                j.completionTime = env.now
-        yield env.process(currentJob.step(env,timeGraph))
+        else:
+            currentJob = min(availableJobs, key = lambda x: x.timeRemaining)
+            yield env.process(currentJob.step(env,timeGraph))
         
 def RR(env,jobs,timeGraph): #3rd algorithm
     startTime = env.now
     timerStart = env.now
     jindex = 0
+    availableJobs = jobs
     while not all(j.done for j in jobs):
-        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        for j in availableJobs:
+            if j.done:
+                jobs.remove(j)
+                j.completionTime = env.now
+                timerStart = env.now
+        availableJobs = [j for j in jobs if j.requestTime <= env.now - startTime]
         if len(availableJobs) == 0:
             yield env.timeout(1)
             timeGraph.append(-1)
@@ -132,16 +143,12 @@ def RR(env,jobs,timeGraph): #3rd algorithm
             jindex = jindex % len(availableJobs)
             timerStart = env.now
         currentJob = availableJobs[jindex]
-        for j in jobs:
-            if j.done:
-                jobs.remove(j)
-                j.completionTime = env.now
         yield env.process(currentJob.step(env,timeGraph))
         
 def SPN(env,jobs,timeGraph): #4th algorithm
     startTime = env.now
     while not all(j.done for j in jobs):
-        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        availableJobs = [j for j in jobs if j.requestTime <= env.now - startTime]
         if len(availableJobs) == 0:
             yield env.timeout(1)
             timeGraph.append(-1)
@@ -156,7 +163,7 @@ def SPN(env,jobs,timeGraph): #4th algorithm
 def HRRN(env,jobs,timeGraph): #5th algorithm
     startTime = env.now
     while not all(j.done for j in jobs):
-        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        availableJobs = [j for j in jobs if j.requestTime <= env.now - startTime]
         if len(availableJobs) == 0:
             yield env.timeout(1)
             timeGraph.append(-1)
@@ -174,7 +181,7 @@ def HRRN(env,jobs,timeGraph): #5th algorithm
 def FB(env,jobs,timeGraph): #6th algorithm
     startTime = env.now
     while not all(j.done for j in jobs):
-        availableJobs = [j for j in jobs if j.requestTime < env.now - startTime]
+        availableJobs = [j for j in jobs if j.requestTime <= env.now - startTime]
         if len(availableJobs) == 0:
             yield env.timeout(1)
             timeGraph.append(-1)
@@ -269,4 +276,4 @@ def main(js):
     global jobs
     jobs = js;
     mainw()
-#mainw()
+mainw()

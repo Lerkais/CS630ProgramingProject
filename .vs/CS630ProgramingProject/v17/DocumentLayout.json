@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\main.py||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:main.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\algos.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:algos.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\graphics.py||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -15,8 +15,8 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:front_end_graphics.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\algos.py||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:algos.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\main.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:main.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 304,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,13 +54,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "algos.py",
               "DocumentMoniker": "C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\algos.py",
               "RelativeDocumentMoniker": "algos.py",
               "ToolTip": "C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\algos.py",
               "RelativeToolTip": "algos.py",
-              "ViewState": "AQIAALcAAAAAAAAAAAAAAMoAAAAaAAAA",
+              "ViewState": "AQIAAGMAAAAAAAAAAAAAAIAAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-04-03T23:27:57.805Z",
               "EditorCaption": ""
@@ -73,7 +73,7 @@
               "RelativeDocumentMoniker": "front_end_graphics.py",
               "ToolTip": "C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\front_end_graphics.py",
               "RelativeToolTip": "front_end_graphics.py",
-              "ViewState": "AQIAALEAAAAAAAAAAAAAANgAAAAaAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAKkAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-04-21T00:41:10.184Z",
               "EditorCaption": ""
@@ -86,14 +86,14 @@
               "RelativeDocumentMoniker": "graphics.py",
               "ToolTip": "C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\graphics.py",
               "RelativeToolTip": "graphics.py",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAATAAAA",
+              "ViewState": "AQIAABsAAAAAAAAAAAAAAD8AAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-02-28T00:40:56.358Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "main.py",
               "DocumentMoniker": "C:\\Users\\Funrun202\\Documents\\GitHub\\CS630ProgramingProject\\main.py",
               "RelativeDocumentMoniker": "main.py",
@@ -107,7 +107,7 @@
           ]
         },
         {
-          "DockedWidth": 209,
+          "DockedWidth": 96,
           "SelectedChildIndex": -1,
           "Children": [
             {

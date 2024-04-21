@@ -20,6 +20,7 @@ def graphSetup():
     fig.set_size_inches(10,6)
 
 def displayGnattChart(timeGraph,numJobs,title,requestGraph,completionGraph):
+    print(title,"Time Graph",timeGraph)
     #Format will be an arra of what job is active at each time step
     global gcount,fig,gntl
     gnt = gntl[gcount%2,gcount%3]
@@ -42,30 +43,26 @@ def displayGnattChart(timeGraph,numJobs,title,requestGraph,completionGraph):
         index += 1
     index = 0
 
-    for i in timeGraph:
-        if i != -1:
-            jid = i
-            prevIndex = index
-            break
-        index += 1
-    index = 0
-    for i in timeGraph:
-        index+=1
-        if i == -1:
-            continue
-        elif i == jid:
-            barLen += 1
+
+    barTups = [[-1,0,0]] #jid,starttime,length
+
+
+    for i in range(len(timeGraph)):
+        if timeGraph[i] == -1:
+            barTups.append([-1,i,1])
+        elif timeGraph[i] != barTups[-1][0]:
+            barTups.append([timeGraph[i],i,1])
         else:
-            #print(jid,barLen)
-            gnt.broken_barh([(prevIndex,barLen)],(jid,1),facecolors=('teal'))
-            totalTimePerJob[jid] += barLen
-            #print("Job " + str(jid) + " has been active at " +str(prevIndex) + " cycles")
-            prevIndex = index
-            jid = i
-            barLen = 0
-    gnt.broken_barh([(prevIndex,barLen)],(jid,1),facecolors=('teal'))
-    totalTimePerJob[jid] += barLen
-    print("Total Time per Job",totalTimePerJob)
+            barTups[-1][2] += 1
+    
+    print(barTups)
+    total = 0
+    for i in barTups:
+        if i[0] != -1:
+            gnt.broken_barh([(i[1],i[2])],(i[0],1),facecolors=('teal'))
+            totalTimePerJob[i[0]] += i[2]
+            total += i[2]
+
     #print("Job " + str(jid) + " has been active at " +str(prevIndex) + " cycles")
     gcount += 1
         

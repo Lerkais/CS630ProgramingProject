@@ -171,7 +171,7 @@ def getJob(i): #function to get job through tkinter graphics window seperate fro
         try: 
             checker = int(arrivalValue) #if values entered cannot work with int
             checker = int(burstValue) #then the user is reprompted
-            if int(arrivalValue) <= 0: #if user enters int that does not make sense, program
+            if int(arrivalValue) < 0: #if user enters int that does not make sense, program #CAN BE 0 
                 arrivalValue = "1" #assumes the user meant 1
             if int(burstValue) <= 0:
                 burstValue = "1"
