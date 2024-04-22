@@ -1,4 +1,5 @@
 from cProfile import label
+from ctypes import alignment
 from lib2to3.pgen2.pgen import generate_grammar
 from turtle import color
 import matplotlib.pyplot as plt
@@ -31,6 +32,10 @@ def displayGnattChart(timeGraph,numJobs,title,requestGraph,completionGraph):
     gnt.set_ylim(0, numJobs)
     gnt.set_xlim(0, len(timeGraph))
     gnt.set_xlabel('Time')
+    #set y axis labels to job id 
+    gnt.yaxis.set_major_locator(plt.MultipleLocator(1))
+    gnt.yaxis.set_major_formatter(plt.ScalarFormatter())
+
     gnt.set_ylabel('Job ID')
     gnt.set_title(title)
     gnt.grid(True)
@@ -74,7 +79,20 @@ def displayGnattChart(timeGraph,numJobs,title,requestGraph,completionGraph):
         leg.legendHandles[0].set_color('teal')
         leg.legendHandles[1].set_color('gray')
         
+    gnt.invert_yaxis()
+    tics = list(range(1,numJobs+1))
+    for i in range(len(tics)):
+        tics[i] -= .5
+        
 
+
+    print("tics: ",tics)
+    gnt.set_yticks(tics,range(1,numJobs+1))
+    gnt.grid(False)
+    
+    gnt.set_yticks(range(numJobs),minor=True)
+    gnt.grid(which='minor', color='gainsboro', linestyle='dashed', linewidth=1)
+    
     
 
 

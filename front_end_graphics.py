@@ -54,7 +54,7 @@ def tupleAction(v1= ()):
 def createMainScreen(): #call this if a program wants the interface
     global check_var1, check_var2, check_var3, check_var4, check_var5, check_var6 #(declares variables so they
     #can communicate with other methods)
-    main_window("800x600") #generates the main window
+    main_window("800x630") #generates the main window
 
     begin_label = customtkinter.CTkLabel(mainMenu, text="Welcome to the Operating System Algorithm Selector.\n To start the program please check the algoritm(s) you would like to test.", font=("Helventica", 18))
     begin_label.pack(pady = 20)
@@ -70,6 +70,28 @@ def createMainScreen(): #call this if a program wants the interface
     check_var5 = check_box("HRRN", 24) #fifth box
 
     check_var6 = check_box("FB", 25) #sixth box
+
+    cvlist = [check_var1, check_var2, check_var3, check_var4, check_var5, check_var6]
+    
+    def select_all():
+        checksa = [boolvar.get() == "off" for boolvar in cvlist]
+
+        if(any(checksa)):
+            check_var1.set("on")
+            check_var2.set("on")
+            check_var3.set("on")
+            check_var4.set("on")
+            check_var5.set("on")
+            check_var6.set("on")
+        else:
+            check_var1.set("off")
+            check_var2.set("off")
+            check_var3.set("off")
+            check_var4.set("off")
+            check_var5.set("off")
+            check_var6.set("off")
+        
+    customtkinter.CTkButton(mainMenu, text="Select All", command=select_all).pack(pady=10)
 
     enter_button() #allows user to send input to be analyzed
 
