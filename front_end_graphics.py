@@ -61,15 +61,18 @@ def createMainScreen(): #call this if a program wants the interface
 
     check_var1 = check_box("FCFS", 20) #first box
 
-    check_var2 = check_box("SRT", 21) #second box
+    check_var2 = check_box("SRT", 20) #second box
 
-    check_var3 = check_box("RR", 22) #third box
+    check_var3 = check_box("RR", 20) #third box
 
-    check_var4 = check_box("SPN", 23) #fourth box
+    check_var4 = check_box("SPN", 20) #fourth box
 
-    check_var5 = check_box("HRRN", 24) #fifth box
+    check_var5 = check_box("HRRN", 20) #fifth box
 
-    check_var6 = check_box("FB", 25) #sixth box
+    check_var6 = check_box("FB", 20) #sixth box
+    
+    check_all = check_box("All", 20)
+    check_all.trace_add("write", lambda *args: select_all())
 
     cvlist = [check_var1, check_var2, check_var3, check_var4, check_var5, check_var6]
     
@@ -91,7 +94,7 @@ def createMainScreen(): #call this if a program wants the interface
             check_var5.set("off")
             check_var6.set("off")
         
-    customtkinter.CTkButton(mainMenu, text="Select All", command=select_all).pack(pady=10)
+    #customtkinter.CTkButton(mainMenu, text="Select All", command=select_all).pack(pady=10)
 
     enter_button() #allows user to send input to be analyzed
 
