@@ -191,10 +191,11 @@ def numberOfJobsEntry(): #same as slider but with text entry
     global numJobsVar, numJobs,numjobs
     numJobsVar = customtkinter.StringVar()
 
-    begin_label = customtkinter.CTkLabel(mainMenu, text="Please enter the number of jobs you would like to process.\nOnce entered, please press enter to continue.", font=("Helventica", 18))
+    begin_label = customtkinter.CTkLabel(mainMenu, text="Please enter the number of jobs you would like to process.\nOnce entered, please press enter to continue.\nEnter 0 to generate demo jobs.", font=("Helventica", 18))
     begin_label.pack(pady = 20)
     numjobs = customtkinter.CTkEntry(mainMenu,textvariable=numJobsVar) #put logic to handle invalid inputs
     numjobs.pack(pady = 40)
+    numJobsVar.set("0")
     
     
     def tracerNumJobs(*args):
