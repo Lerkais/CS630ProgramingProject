@@ -3,6 +3,9 @@
 .vs/ProjectSettings.json
 .vs/slnx.sqlite
 *.vsidx
+*.json
+*.pyc
+*.wsuo
 .vs/CS630ProgramingProject/v17/DocumentLayout.json
 .vs/CS630ProgramingProject/v17/.wsuo
 __pycache__/algos.cpython-39.pyc
