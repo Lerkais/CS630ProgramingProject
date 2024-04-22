@@ -3,3 +3,8 @@
 .vs/ProjectSettings.json
 .vs/slnx.sqlite
 *.vsidx
+.vs/CS630ProgramingProject/v17/DocumentLayout.json
+.vs/CS630ProgramingProject/v17/.wsuo
+__pycache__/algos.cpython-39.pyc
+__pycache__/front_end_graphics.cpython-39.pyc
+__pycache__/graphics.cpython-39.pyc

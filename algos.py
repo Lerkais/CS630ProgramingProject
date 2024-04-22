@@ -272,8 +272,9 @@ def mainw(): #main executable of the program
     env.run()
 
 
-def main(js):
-    global jobs
+def main(js,algs):
+    global jobs,algostorun
     jobs = js;
+    algostorun = algs
     mainw()
-mainw()
+#mainw()
