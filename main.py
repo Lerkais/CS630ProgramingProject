@@ -22,7 +22,3 @@ for i in range(g.numberOfJobsInput):
 
 algos.main(jobslist,algas)
 
-#updates needed: 
-#error handle for inputs + include mechanism to tell the user that they entered an incorrect input
-#have algorithms load only the selected ones
-#Add unit measurement for time.
