@@ -1,4 +1,4 @@
-#4.16.24
+#The point of this file is to run the whole program.
 import algos
 import front_end_graphics as g 
 
