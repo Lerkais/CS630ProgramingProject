@@ -1,9 +1,7 @@
-#4.19.24
 #The point of this program is to great a front end for the user to interact with.
 import customtkinter #A custom made more updated version of tkinter
-import time #for sleep()
 
-def button_event(): #defines action when button is pressed #should work fine as standaline
+def button_event(): #defines action when button is pressed
     if check_var1.get() == "on" or check_var2.get() == "on" or check_var3.get() == "on" or check_var4.get() == "on" or check_var5.get() == "on" or check_var6.get() == "on": #first checks condition if nothing was clicked
         label.configure(text="Please click again to confirm the selected options.") #checks to see if check mark was clicked
         global toLoadAlgorithm
@@ -24,10 +22,10 @@ def main_window(dimensions = "800x600", top_Title = "Algorithm Selector"):
 def check_box(text_input = "Algorithm", pady=20):
     global check_var
     check_var = customtkinter.StringVar(value = "off") #custom string
-    check = customtkinter.CTkCheckBox(mainMenu, text=text_input, variable=check_var, #label 1
+    check = customtkinter.CTkCheckBox(mainMenu, text=text_input, variable=check_var,
                                     onvalue="on", offvalue="off", #command can be used to link to which ever algorithm we want
                                     fg_color = "blue")
-    check.pack(pady=pady) #first box
+    check.pack(pady=pady)
     return check_var
 
 def enter_button(button_label = "Enter", relx = 0.5, rely = .9, pady = 60, eventAction = button_event):
