@@ -1,3 +1,4 @@
+#The point of this file is to store each algorithm used.
 from urllib import request
 from simpy import *
 from random import *
