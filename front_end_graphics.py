@@ -1,4 +1,4 @@
-#The point of this program is to great a front end for the user to interact with.
+#The point of this file is to great a front end for the user to interact with.
 import customtkinter #A custom made more updated version of tkinter
 
 def button_event(): #defines action when button is pressed
