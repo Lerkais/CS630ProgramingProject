@@ -1,4 +1,4 @@
-#The point of this program is to help format the output of the simulator.
+#The point of this file is to help format the output of the simulator.
 from cProfile import label
 from ctypes import alignment
 from lib2to3.pgen2.pgen import generate_grammar
